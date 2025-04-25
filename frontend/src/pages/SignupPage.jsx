@@ -50,7 +50,7 @@ const SignupPage = ({ onToggle }) => {
       <div className="container mx-auto min-h-screen flex items-center justify-center px-4">
         <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           {/* Left Side - Branding */}
-          <div className="flex flex-col md:flex-row items-center justify-center text-center space-y-4 md:space-y-0 md:space-x-6 w-full max-w-[40rem] mx-auto z-10 h-screen">
+          <div className="flex flex-col md:flex-row items-center justify-center text-center space-y-4 md:space-y-0 md:space-x-6 w-full max-w-[40rem] mx-auto z-10 md:h-screen">
             <img
               src="./chatIcon.png"
               className="w-[80px] sm:w-[100px] md:w-[100px] max-w-full m-3 md:m-1"
