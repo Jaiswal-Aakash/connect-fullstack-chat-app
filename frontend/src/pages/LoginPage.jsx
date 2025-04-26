@@ -39,8 +39,8 @@ const SignupPage = ({ onToggle }) => {
               src="./chatIcon.png"
               className="w-[80px] sm:w-[100px] md:w-[100px] max-w-full m-3 md:m-1"
             />
-            <h1 className="text-black text-3xl sm:text-4xl md:text-4xl font-bold leading-tight">
-              <span className="inline-block w-[400px] text-left">
+            <h1 className="text-black text-2xl sm:text-4xl md:text-4xl font-bold leading-tight">
+              <span className="inline-block w-[300px] text-center md:text-left lg:text-left">
                 <Typewriter
                   words={["Unlock Possibilities,", "One Click at a Time!"]}
                   loop={0}

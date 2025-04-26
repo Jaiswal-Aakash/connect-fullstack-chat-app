@@ -56,7 +56,7 @@ const SignupPage = ({ onToggle }) => {
               className="w-[80px] sm:w-[100px] md:w-[100px] max-w-full m-3 md:m-1"
             />
             <h1 className="text-black text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
-              <span className="inline-block w-[300px] text-left">
+              <span className="inline-block w-[300px] text-center lg:text-left">
                 <Typewriter
                   words={["Fast,", "Reliable,", "Responsive!"]}
                   loop={0}
