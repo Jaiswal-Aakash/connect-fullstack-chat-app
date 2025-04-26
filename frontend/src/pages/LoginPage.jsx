@@ -40,7 +40,7 @@ const SignupPage = ({ onToggle }) => {
               className="w-[80px] sm:w-[100px] md:w-[100px] max-w-full m-3 md:m-1"
             />
             <h1 className="text-black text-2xl sm:text-4xl md:text-4xl font-bold leading-tight">
-              <span className="inline-block w-[300px] text-center md:text-left lg:text-left">
+              <span className="inline-block w-[300px] text-center md:text-left lg:text-left ">
                 <Typewriter
                   words={["Unlock Possibilities,", "One Click at a Time!"]}
                   loop={0}
@@ -99,7 +99,7 @@ const SignupPage = ({ onToggle }) => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-8 text-gray-500"
+                    className="absolute right-3 top-9 text-gray-500"
                   >
                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
