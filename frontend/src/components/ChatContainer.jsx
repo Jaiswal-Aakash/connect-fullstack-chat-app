@@ -23,13 +23,15 @@ const ChatContainer = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   useEffect(() => {
-    getMessages(selectedUser._id);
-    subscribeToNewMessage();
+    if (selectedUser?._id) {
+      getMessages(selectedUser._id);
+      subscribeToNewMessage();
+    }
     return () => {
       unsubscribeFromNewMessage();
     };
   }, [
-    selectedUser._id,
+    selectedUser?._id,
     getMessages,
     subscribeToNewMessage,
     unsubscribeFromNewMessage,
@@ -40,6 +42,7 @@ const ChatContainer = () => {
     getMessages(selectedUser._id);
     setOpenDropdown(null);
   };
+
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
@@ -67,7 +70,7 @@ const ChatContainer = () => {
           const isSender = message.senderId === authUser._id;
           const sentTime = new Date(message.createdAt);
           const now = new Date();
-          const timeDiff = (now - sentTime) / 1000; // in seconds
+          const timeDiff = (now - sentTime) / 1000; // seconds
           const canDelete = isSender && timeDiff < 60 && !message.isDeleted;
 
           return (
@@ -96,7 +99,7 @@ const ChatContainer = () => {
                 </time>
 
                 {isSender && (
-                  <div className="relative">
+                  <div className="relative group">
                     <button
                       className="text-gray-500 hover:text-black"
                       onClick={() =>
@@ -109,14 +112,18 @@ const ChatContainer = () => {
                     </button>
 
                     {openDropdown === message._id && (
-                      <div className="absolute z-10 right-0 top-5 bg-white shadow-md border rounded px-2 py-1 w-32">
-                        {canDelete && (
+                      <div className="absolute z-10 right-0 top-5 bg-white shadow-md border rounded px-2 py-1 w-36">
+                        {canDelete ? (
                           <button
                             onClick={() => handleDelete(message._id)}
-                            className=" h-8 w-full flex items-center justify-center text-sm text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 rounded-md py-2 px-4 transition duration-200 ease-in-out transform hover:scale-105"
+                            className="h-8 w-full flex items-center justify-center text-sm text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
                           >
                             Delete
                           </button>
+                        ) : (
+                          <div className="text-xs text-gray-400 text-center p-1">
+                            Deletion disabled after 1 min
+                          </div>
                         )}
                       </div>
                     )}
@@ -152,6 +159,7 @@ const ChatContainer = () => {
         })}
         <div ref={messagesEndRef} />
       </div>
+
       <div className="absolute bottom-0 left-0 right-0 bg-white">
         <MessageInput />
       </div>

@@ -1,5 +1,4 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { useLocation } from "react-router-dom";
 import { useChatStore } from "../store/useChatStore";
 import Sidebar from "./Sidebar";
@@ -9,26 +8,51 @@ import ChatContainer from "./ChatContainer";
 const ChatPanel = () => {
   const location = useLocation();
   const isChatOpen = location.pathname === "/message";
-  const {selectedUser} = useChatStore();
+  const { selectedUser } = useChatStore();
+
+  const showSidebarOnMobile = !selectedUser; // show only if no chat selected
 
   return (
     <div className="flex h-[95vh] my-4 w-full">
-      <Sidebar isChatOpen={isChatOpen} />
-      {/* Message Panel - Adjusts Width */}
-      <motion.div
-        animate={{ width: isChatOpen ? "73vw" : "93vw" }}
-        transition={{ type: "tween", stiffness: 100, damping: 15 }}
-        className="h-full bg-gray-200 border border-gray-300 shadow-md rounded-[14px] flex items-center justify-center ml-3"
+      {/* Sidebar */}
+      <div
+        className={`
+          h-full 
+          ${showSidebarOnMobile ? "flex" : "hidden"} 
+          md:flex 
+          transition-all 
+          duration-300 
+          ease-in-out
+        `}
+        style={{
+          width: "270px",
+          minWidth: "270px",
+        }}
+      >
+        <Sidebar isChatOpen={isChatOpen} />
+      </div>
+
+      {/* Chat Panel */}
+      <div
+        className={`
+          flex-1 
+          h-full 
+          ${selectedUser ? "flex" : "hidden"} 
+          md:flex 
+          ml-3 mr-3
+          items-center 
+          justify-center
+        `}
         style={{
           backdropFilter: "blur(5px)",
         }}
       >
-        <div className=" bg-white rounded-lg shadow-cl w-full max-w-6xl h-[calc(100vh-2rem)]">
+        <div className="bg-white rounded-lg shadow-cl w-full max-w-6xl h-[calc(100vh-2rem)]">
           <div className="flex h-full rounded-lg overflow-hidden">
             {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
           </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
