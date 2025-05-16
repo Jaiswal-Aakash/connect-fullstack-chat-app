@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link, useLocation } from "react-router-dom";
+import SettingsPage from "../pages/SettingsPage";
 
 const Navbar = () => {
   const { authUser, logout } = useAuthStore();
+  const [showSettings, setShowSettings] = useState(false);
   const location = useLocation();
+
+  const toggleSettings = () => {
+    setShowSettings(prev => !prev);
+  };
 
   return (
     <div
@@ -48,16 +54,15 @@ const Navbar = () => {
       </div>
 
       <div className="flex cursor-pointer flex-col pb-3 gap-5 w-7 items-center">
-        <Link to="/settings" className="relative flex items-center">
-          {location.pathname === "/settings" && (
-            <div
-              style={{ backgroundColor: "#08C5F9" }}
-              className="absolute -right-3 w-1 h-6 rounded-full"
-            ></div>
-          )}
-          <img src="settings.png" alt="setting" className="w-6 h-6" />
-        </Link>
-
+        <img
+          src="settings.png"
+          onClick={toggleSettings}
+          alt="setting"
+          className="w-6 h-6"
+        />
+        {showSettings && (
+          <SettingsPage onClose={() => setShowSettings(false)} />
+        )}
         <div
           onClick={logout}
           className="flex justify-center items-center w-10 h-10 rounded-full border border-white/30 backdrop-blur-lg bg-black/10"

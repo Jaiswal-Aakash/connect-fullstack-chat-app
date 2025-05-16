@@ -32,7 +32,7 @@ const Sidebar = ({ isChatOpen, fullWidth = false }) => {
       transition={{ type: "spring", stiffness: 100, damping: 15 }}
       className={`h-full bg-gradient-to-br from-blue-100 via-white to-blue-50 border border-gray-300 shadow-md rounded-[14px] flex items-center justify-center`}
       style={{
-        width: fullWidth ? "100%" : isChatOpen ? "20vw" : "0vw",
+        width: fullWidth ? "100%" : isChatOpen ? "100vw" : "0vw",
         overflow: "hidden",
         backdropFilter: "blur(5px)",
       }}

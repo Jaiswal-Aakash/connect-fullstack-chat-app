@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FiRefreshCw } from "react-icons/fi";
+import TrendingTopics from "../components/TrendingTopics";
 const HomePage = () => {
   const [memes, setMemes] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +26,9 @@ const HomePage = () => {
   }, []);
 
   return (
+    <div className="flex w-full h-screen">
+      {/* Left Spacer (optional sidebar space) */}
+      <div className="hidden lg:block w-[10%]"></div>
     <div
       className="flex flex-col flex-1 items-center overflow-y-auto mr-3 my-4 p-4 h-[95vh] w-full rounded-[14px] border border-gray-300 shadow-md bg-white relative"
       style={{
@@ -88,6 +92,14 @@ const HomePage = () => {
         </div>
       )}
     </div>
+     {/* Right Trends Panel */}
+      <div className="hidden lg:block w-[20%] pr-4 pt-6">
+        <div className="sticky top-24">
+          <TrendingTopics />
+        </div>
+      </div>
+    </div>
+
   );
 };
 

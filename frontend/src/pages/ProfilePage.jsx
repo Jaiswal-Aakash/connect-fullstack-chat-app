@@ -48,7 +48,7 @@ const isSaving = isUpdatingProfileInfo || isEditingProfileBio;
 
 
   return (
-    <div className="flex flex-col bg-white items-center justify-between text-black h-[95vh] mr-3 my-4 w-screen rounded-[14px] border border-gray-300 shadow-md p-10 gap-8 z-50">
+    <div className="flex flex-col bg-white items-center justify-between text-black h-[95vh] mr-3 my-4 w-screen rounded-[14px] border border-gray-300 shadow-md p-10 gap-8 z-30">
       <div id="heading" className="h-[13%] w-[88vw] flex flex-col items-center">
         <h1 className="text-3xl">Edit Profile</h1>
         <p className="tracking-wider">Your profile information</p>
