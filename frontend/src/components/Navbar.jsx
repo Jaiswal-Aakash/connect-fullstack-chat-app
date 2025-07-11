@@ -33,7 +33,6 @@ const Navbar = () => {
       <div className="flex cursor-pointer flex-col py-12 gap-8 w-7">
         {[
           { path: "/message", icon: "message.png", alt: "msg" },
-          { path: "/status", icon: "status.png", alt: "status" },
           { path: "/add-contact", icon: "addContact.png", alt: "add" },
         ].map((item) => (
           <Link
