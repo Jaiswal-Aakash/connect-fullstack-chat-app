@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import "./App.css";
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar.jsx";
-import HomePage from "./pages/HomePage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import SettingsPage from "./pages/SettingsPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -16,7 +15,7 @@ const App = () => {
   const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
   const location = useLocation();
   console.log("users", onlineUsers);
-console.log({ onlineUsers });
+  console.log({ onlineUsers });
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -41,7 +40,7 @@ console.log({ onlineUsers });
       <Routes>
         <Route
           path="/"
-          element={authUser ? <HomePage /> : <Navigate to="/login" />}
+          element={authUser ? <Navigate to="/message" /> : <Navigate to="/login" />}
         />
         <Route
           path="/signup"
