@@ -15,7 +15,7 @@ const ProfilePage = () => {
   const [bio, setBio] = React.useState(authUser?.bio || "");
 const isSaving = isUpdatingProfileInfo || isEditingProfileBio;
 
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = async (e) => {  
     const file = e.target.files[0];
     if (!file) return;                                      
 

@@ -6,6 +6,7 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import SettingsPage from "./pages/SettingsPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
+import AddContactPage from "./pages/AddContactPage.jsx";
 import { useAuthStore } from "./store/useAuthStore.js";
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
@@ -58,6 +59,10 @@ const App = () => {
         <Route
           path="/message"
           element={authUser ? <ChatPanel /> : <Navigate to="/login" />}
+        />
+        <Route
+          path="/add-contact"
+          element={authUser ? <AddContactPage /> : <Navigate to="/login" />}
         />
       </Routes>
       <Toaster />

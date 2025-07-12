@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import Message from '../models/message.model.js';
 import User from '../models/user.model.js';
 import cloudinary from '../lib/cloudinary.js';
@@ -5,11 +6,66 @@ import { io, getReceiverSocketId } from '../lib/socket.js';
 export const getUsersForSidebar = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
-        const filteredUsers = await User.find({ _id: { $ne: loggedInUserId } }).select("-password");
+
+        // Only consider messages with actual content
+        const messages = await Message.find({
+            $and: [
+                {
+                    $or: [  
+                        { senderId: loggedInUserId },
+                        { receiverId: loggedInUserId }
+                    ]
+                },
+                {
+                    $or: [
+                        { text: { $ne: null, $ne: "" } },
+                        { image: { $ne: null, $ne: "" } }
+                    ]
+                }
+            ]
+        });
+
+        const chatUserIds = new Set();
+        messages.forEach(message => {
+            if (message.senderId.toString() !== loggedInUserId.toString()) {
+                chatUserIds.add(message.senderId.toString());
+            }
+            if (message.receiverId.toString() !== loggedInUserId.toString()) {
+                chatUserIds.add(message.receiverId.toString());
+            }
+        });
+
+        const chatUserIdsArray = Array.from(chatUserIds).map(id => new mongoose.Types.ObjectId(id));
+
+        const filteredUsers = await User.find({
+            _id: { $in: chatUserIdsArray }
+        }).select("-password");
+
+        console.log(`Found ${messages.length} messages with content for user ${loggedInUserId}`);
+        console.log(`Users with chat history: ${filteredUsers.length}`);
+
         res.status(200).json(filteredUsers);
     } catch (err) {
-        console.log("Error in getUsserForSidebar: ", err.message);
-        res.status(500).json({ message: "Internal server error" })
+        console.log("Error in getUsersForSidebar: ", err.message);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
+
+export const getAllUsers = async (req, res) => {
+    try {
+        console.log("getAllUsers function called");
+        const loggedInUserId = req.user._id;
+        
+        // Get all users except the logged-in user
+        const allUsers = await User.find({ 
+            _id: { $ne: loggedInUserId } 
+        }).select("-password");
+
+        console.log(`Found ${allUsers.length} total users`);
+        res.status(200).json(allUsers);
+    } catch (err) {
+        console.log("Error in getAllUsers: ", err.message);
+        res.status(500).json({ message: "Internal server error" });
     }
 }
 

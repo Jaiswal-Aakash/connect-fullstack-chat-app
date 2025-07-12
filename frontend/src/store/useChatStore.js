@@ -3,6 +3,12 @@ import toast from 'react-hot-toast';
 import { axiosInstance } from '../lib/axios.js';
 import { useAuthStore } from './useAuthStore.js';
 
+function moveUserToTop(users, userId) {
+    const idx = users.findIndex(u => u._id === userId);
+    if (idx === -1) return users;
+    const user = users[idx];
+    return [user, ...users.slice(0, idx), ...users.slice(idx + 1)];
+}
 
 export const useChatStore = create((set, get) => ({
     messages: [],
@@ -15,7 +21,17 @@ export const useChatStore = create((set, get) => ({
         set({ isUsersLoading: true });
         try {
             const res = await axiosInstance.get("/messages/users");
-            console.log("fetched", res.data);
+            set({ users: res.data });
+        } catch (error) {
+            toast.error(error.response.data.message);
+        } finally {
+            set({ isUsersLoading: false });
+        }
+    },
+    getAllUsers: async () => {
+        set({ isUsersLoading: true });
+        try {
+            const res = await axiosInstance.get("/messages/all-users");
             set({ users: res.data });
         } catch (error) {
             toast.error(error.response.data.message);
@@ -35,10 +51,13 @@ export const useChatStore = create((set, get) => ({
         }
     },
     sendMessage: async (messageData) => {
-        const { selectedUser, messages } = get();
+        const { selectedUser, messages, users } = get();
         try {
             const res = await axiosInstance.post(`/messages/send/${selectedUser._id}`, messageData);
-            set({ messages: [...messages, res.data] });
+            set({ 
+                messages: [...messages, res.data],
+                users: moveUserToTop(users, selectedUser._id)
+            });
         } catch (error) {
             toast.error(error?.response?.data?.message || 'Failed to send message');
             console.log(error);
@@ -78,14 +97,17 @@ export const useChatStore = create((set, get) => ({
         }
     },
     subscribeToNewMessage: () => {
-        const { selectedUser } = get();
+        const { selectedUser, users } = get();
         if (!selectedUser) return;
         const socket = useAuthStore.getState().socket;
         
         socket.on("newMessage", (newMessage) => {
             const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
             if (!isMessageSentFromSelectedUser) return;
-            set({ messages: [...get().messages, newMessage], })
+            set({ 
+                messages: [...get().messages, newMessage],
+                users: moveUserToTop(users, selectedUser._id)
+            });
         });
     },
     unsubscribeFromNewMessage: () => {
