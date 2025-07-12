@@ -98,16 +98,22 @@ export const useChatStore = create((set, get) => ({
     },
     subscribeToNewMessage: () => {
         const { selectedUser, users } = get();
-        if (!selectedUser) return;
         const socket = useAuthStore.getState().socket;
         
         socket.on("newMessage", (newMessage) => {
-            const isMessageSentFromSelectedUser = newMessage.senderId === selectedUser._id;
-            if (!isMessageSentFromSelectedUser) return;
-            set({ 
-                messages: [...get().messages, newMessage],
-                users: moveUserToTop(users, selectedUser._id)
-            });
+            const { authUser } = useAuthStore.getState();
+            const isMessageFromOtherUser = newMessage.senderId !== authUser._id;
+            
+            if (isMessageFromOtherUser) {
+                // Move the sender to the top of the users list
+                const updatedUsers = moveUserToTop(users, newMessage.senderId);
+                set({ users: updatedUsers });
+                
+                // If the message is from the currently selected user, add it to messages
+                if (selectedUser && newMessage.senderId === selectedUser._id) {
+                    set({ messages: [...get().messages, newMessage] });
+                }
+            }
         });
     },
     unsubscribeFromNewMessage: () => {

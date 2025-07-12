@@ -58,9 +58,6 @@ const Navbar = () => {
           alt="setting"
           className="w-6 h-6"
         />
-        {showSettings && (
-          <SettingsPage onClose={() => setShowSettings(false)} />
-        )}
         <div
           onClick={logout}
           className="flex justify-center items-center w-10 h-10 rounded-full border border-white/30 backdrop-blur-lg bg-black/10"
@@ -68,6 +65,11 @@ const Navbar = () => {
           <img className="w-8 h-8 mt-1.5 ml-0.5" src="logout.png" alt="log" />
         </div>
       </div>
+      
+      {/* Render settings modal outside the navbar container */}
+      {showSettings && (
+        <SettingsPage onClose={() => setShowSettings(false)} />
+      )}
     </div>
   );
 };

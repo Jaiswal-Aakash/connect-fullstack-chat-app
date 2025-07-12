@@ -7,7 +7,7 @@ export const getUsersForSidebar = async (req, res) => {
     try {
         const loggedInUserId = req.user._id;
 
-        // Only consider messages with actual content
+        // Get all messages between logged-in user and others
         const messages = await Message.find({
             $and: [
                 {
@@ -23,28 +23,41 @@ export const getUsersForSidebar = async (req, res) => {
                     ]
                 }
             ]
-        });
+        }).sort({ createdAt: -1 });
 
-        const chatUserIds = new Set();
+        // Create a map to track the most recent message timestamp for each user
+        const userLastMessageMap = new Map();
+        
         messages.forEach(message => {
-            if (message.senderId.toString() !== loggedInUserId.toString()) {
-                chatUserIds.add(message.senderId.toString());
-            }
-            if (message.receiverId.toString() !== loggedInUserId.toString()) {
-                chatUserIds.add(message.receiverId.toString());
+            const otherUserId = message.senderId.toString() === loggedInUserId.toString() 
+                ? message.receiverId.toString() 
+                : message.senderId.toString();
+            
+            if (!userLastMessageMap.has(otherUserId) || 
+                message.createdAt > userLastMessageMap.get(otherUserId)) {
+                userLastMessageMap.set(otherUserId, message.createdAt);
             }
         });
 
-        const chatUserIdsArray = Array.from(chatUserIds).map(id => new mongoose.Types.ObjectId(id));
+        // Get unique user IDs
+        const chatUserIds = Array.from(userLastMessageMap.keys()).map(id => new mongoose.Types.ObjectId(id));
 
+        // Get users and sort them by their most recent message
         const filteredUsers = await User.find({
-            _id: { $in: chatUserIdsArray }
+            _id: { $in: chatUserIds }
         }).select("-password");
 
-        console.log(`Found ${messages.length} messages with content for user ${loggedInUserId}`);
-        console.log(`Users with chat history: ${filteredUsers.length}`);
+        // Sort users by their most recent message timestamp
+        const sortedUsers = filteredUsers.sort((a, b) => {
+            const aLastMessage = userLastMessageMap.get(a._id.toString());
+            const bLastMessage = userLastMessageMap.get(b._id.toString());
+            return bLastMessage - aLastMessage; // Most recent first
+        });
 
-        res.status(200).json(filteredUsers);
+        console.log(`Found ${messages.length} messages with content for user ${loggedInUserId}`);
+        console.log(`Users with chat history: ${sortedUsers.length}`);
+
+        res.status(200).json(sortedUsers);
     } catch (err) {
         console.log("Error in getUsersForSidebar: ", err.message);
         res.status(500).json({ message: "Internal server error" });
