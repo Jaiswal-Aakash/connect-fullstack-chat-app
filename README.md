@@ -16,23 +16,6 @@ A modern, fullstack real-time chat application with user profiles, contact disco
 - **Profile Preview**: Click any user to preview their profile
 - **Recent Chats First**: Most recent conversations always at the top
 - **Search**: Find users by name in Add Contact
-- **Dark/Light Mode**: Toggle for user preference (if enabled)
-
----
-
-## 🖼️ Screenshots
-
-### Login & Signup
-![Login](frontend/public/preview.png)
-
-### Add Contact Page
-![Add Contact](frontend/public/addContact.png)
-
-### Chat Page
-![Chat](frontend/public/chatTheme.png)
-
-### Profile Page
-![Profile](frontend/public/profile.png)
 
 ---
 
@@ -106,7 +89,7 @@ npm run dev
 ```
 
 ### 6. **Open the app**
-- Visit [http://localhost:5173](http://localhost:5173) in your browser.
+- Visit http://localhost:5173 in your browser.
 
 ---
 
@@ -123,7 +106,6 @@ npm run dev
 - Built by Akash Jaiswal, Suman Maharana, Abhimanyu
 - UI icons by [Lucide](https://lucide.dev/)
 - Emoji Picker by [emoji-picker-react](https://github.com/ealush/emoji-picker-react)
-- Special thanks to open source contributors!
 
 ---
 
