@@ -45,12 +45,12 @@ const Sidebar = ({ isChatOpen, fullWidth = false }) => {
           fullWidth ? "" : "lg:w-72 w-20"
         }`}
       >
-        <div className="border-b-8 w-full p-5 flex gap-2">
-          <Users className="size-6" />
-          <span className="font-medium hidden lg:block">Contacts</span>
+        <div className="border-b-8 w-full p-3 lg:p-5 flex gap-2 items-center">
+          <Users className="size-5 lg:size-6" />
+          <span className="font-medium text-sm lg:text-base hidden sm:block">Contacts</span>
         </div>
 
-        <div className="overflow-y-auto w-full py-3">
+        <div className="overflow-y-auto w-full py-2 lg:py-3">
           {users.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-64 text-gray-500 px-4">
               <div className="text-center">
@@ -78,29 +78,37 @@ const Sidebar = ({ isChatOpen, fullWidth = false }) => {
                 key={user._id}
                 onClick={() => setSelectedUser(user)}
                 className={`
-                  w-full p-3 flex items-center gap-3
-                  hover:bg-slate-100 rounded-[12px] transition-colors
+                  w-full p-2 lg:p-3 flex items-center gap-2 lg:gap-3 group
+                  hover:bg-slate-100 rounded-[12px] transition-colors relative
                   ${selectedUser?._id === user._id ? "bg-slate-100" : ""}
                 `}
               >
-                <div className="relative mx-auto lg:mx-0">
+                <div className="relative flex-shrink-0">
                   <img
                     src={user.profilePic || "/avatar.png"}
                     alt={user.name}
-                    className="size-12 object-cover rounded-full"
+                    className="size-10 lg:size-12 object-cover rounded-full"
                   />
                   {onlineUsers.includes(user._id) && (
                     <span
-                      className="absolute bottom-0 right-0 size-3 bg-green-500 
+                      className="absolute bottom-0 right-0 size-2.5 lg:size-3 bg-green-500 
                       rounded-full ring-2 ring-zinc-900"
                     />
                   )}
                 </div>
 
-                {/* User info - only visible on larger screens */}
-                <div className="hidden lg:block text-left min-w-0">
-                  <div className="font-medium truncate">{user.fullName}</div>
-                  <div className="text-sm text-zinc-400">
+                {/* User info - visible on all screens */}
+                <div className="flex-1 text-left min-w-0 hidden sm:block">
+                  <div className="font-medium truncate text-sm lg:text-base">{user.fullName}</div>
+                  <div className="text-xs lg:text-sm text-zinc-400">
+                    {onlineUsers.includes(user._id) ? "Online" : "Offline"}
+                  </div>
+                </div>
+
+                {/* Mobile user name - visible on very small screens */}
+                <div className="sm:hidden flex-1 text-left min-w-0">
+                  <div className="font-medium truncate text-xs">{user.fullName}</div>
+                  <div className="text-xs text-zinc-400">
                     {onlineUsers.includes(user._id) ? "Online" : "Offline"}
                   </div>
                 </div>
